@@ -1,6 +1,7 @@
 package conways.game.of.life;
 
 import conways.game.of.life.Celula.EstadoDeVida;
+import conways.game.of.life.color.*;
 
 public class GameOfLife {
     Celula[][] matrix;
@@ -19,7 +20,7 @@ public class GameOfLife {
         for(int i = 0; i < filas; i++){
             for(int j = 0 ; j < columnas;j++){
                 if(matrixInicial[i][j] == 1){
-                    this.matrix[i][j] = new Celula(EstadoDeVida.VIVO);
+                    this.matrix[i][j] = new Celula(EstadoDeVida.VIVO, new Rojo());
                 }else{
                     this.matrix[i][j] = new Celula(EstadoDeVida.MUERTO); 
                 }
@@ -83,16 +84,22 @@ public class GameOfLife {
     
     public String toString(){
         String res = 
-        "\n |TAMANIO: " + filas + " x " + columnas + 
-        "\n |REGLAS SETEADAS: " + nacimientoBehavior.toString() + "/" + sobrevivirBehavior.toString() + "\n\n  |";
+        " |TAMANIO: " + filas + " x " + columnas + 
+        "\n |FORMATO: " + "[Estado / Color] -> Estados :💀 = Muerto  🤍 = Vivo , colorDefault=⚫"  +
+        "\n |REGLAS SETEADAS: " + nacimientoBehavior.toString() + "/" + sobrevivirBehavior.toString() + "\n  |\n  |";
 
         for(int i = 0 ; i<filas;i++){
             for(int j = 0; j < columnas;j++){
-                if(matrix[i][j].estado == EstadoDeVida.VIVO){ res+="🧑";}else{ res+="🧟";}
+                Celula current = matrix[i][j];
+                if(current.estado == EstadoDeVida.VIVO){
+                    res+=" [🤍"+ current.toString() +"] ";
+                }else{ 
+                    res+=" [💀"+ current.toString() +"] ";
+                }
             }
-            if(i != filas-1){res += "\n  |";}
+            if(i != filas-1){res += "\n  |\n  |";}
         }
-        res+="\n";
+        res+="\n  |\n";
         return res;
     }
 }
