@@ -30,9 +30,13 @@ public class Celula {
         return colorActual.toStringIcon();
     }
 
-    public String getColor(){
+    public String getColorName(){
         if(colorActual == null){return "SIN COLOR";}
         return colorActual.toStringName();
+    }
+
+    public ColorBehavior getColor(){
+        return colorActual;
     }
 
     /* 

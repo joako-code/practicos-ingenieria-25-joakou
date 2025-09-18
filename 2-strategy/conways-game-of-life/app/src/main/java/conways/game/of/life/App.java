@@ -1,6 +1,5 @@
 package conways.game.of.life;
-import conways.game.of.life.reglasConcretas.B36;
-import conways.game.of.life.reglasConcretas.S23;
+import conways.game.of.life.reglasConcretas.*;
 public class App {
 
     public static void main(String[] args) {
@@ -12,7 +11,7 @@ public class App {
             {0,1,0,1,1}
         };
 
-        NacimientoBehavior reglaParaNacer = new B36();
+        NacimientoBehavior reglaParaNacer = new B3Inmigration();
         SobrevivirBehavior reglaParaSobrevivir = new S23();
 
         GameOfLife game = new GameOfLife(inicializacion, reglaParaNacer, reglaParaSobrevivir);

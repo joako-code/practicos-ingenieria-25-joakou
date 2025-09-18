@@ -4,12 +4,22 @@ import java.util.List;
 
 public abstract class NacimientoBehavior {
     protected List<Integer> numeros;
+    protected boolean debeNacerConColor;
 
     public NacimientoBehavior(List<Integer> numeros){
         this.numeros = numeros;
     }
 
+    public NacimientoBehavior(List<Integer> numeros, boolean debeNacerConColor){
+        this.numeros = numeros;
+        this.debeNacerConColor = debeNacerConColor;
+    }
+
     public abstract boolean tieneQueNacer(int cantVecinosVivos);
+
+    public boolean tieneQueNacerConColor(){
+        return debeNacerConColor;
+    }
 
     public String toString(){
         String res = "B";

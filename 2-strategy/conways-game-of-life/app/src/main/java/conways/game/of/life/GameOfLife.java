@@ -3,6 +3,8 @@ package conways.game.of.life;
 import conways.game.of.life.Celula.EstadoDeVida;
 import conways.game.of.life.color.*;
 
+import java.util.HashMap;
+
 public class GameOfLife {
     Celula[][] matrix;
     int filas;
@@ -50,11 +52,27 @@ public class GameOfLife {
                 EstadoDeVida estadoDeLaCelula = matrix[i][j].estado;
 
                 if(estadoDeLaCelula == EstadoDeVida.VIVO && sobrevivirBehavior.tieneQueSobrevivir(vecinosVivosDeLaCelula)){
+
+
                     nuevaGeneracion[i][j] = new Celula(EstadoDeVida.VIVO);
+
+
                 }else if (estadoDeLaCelula == EstadoDeVida.MUERTO && nacimientoBehavior.tieneQueNacer(vecinosVivosDeLaCelula)){
-                    nuevaGeneracion[i][j] = new Celula(EstadoDeVida.VIVO);
+
+                    if(nacimientoBehavior.tieneQueNacerConColor()){
+                        nuevaGeneracion[i][j] = new Celula(EstadoDeVida.VIVO,colorMayoritario(i,j));
+                    }else{
+                        nuevaGeneracion[i][j] = new Celula(EstadoDeVida.VIVO);
+                    }
+                    
+
+
                 }else{
+
+
                     nuevaGeneracion[i][j] = new Celula(EstadoDeVida.MUERTO);
+
+
                 }
                 
             }
@@ -82,6 +100,37 @@ public class GameOfLife {
         return cantVecinosVivos;
     }
     
+    public ColorBehavior colorMayoritario(int x, int y){
+        HashMap<ColorBehavior, Integer> colorCount = new HashMap<>();
+
+        for(int i = -1; i <= 1; i++){
+            for(int j = -1; j <= 1; j++){
+                int actualX = x + i;
+                int actualY = y + j;
+                if(actualX >= 0 && actualX < filas && actualY >= 0 && actualY < columnas && !(actualX == x && actualY == y)){
+                    Celula current = matrix[actualX][actualY];
+                    if(current.getColor() != null){
+                        colorCount.put(current.getColor(), colorCount.getOrDefault(current.getColor(), 0) + 1);
+                    }
+                }
+            }
+        }
+
+        ColorBehavior mayoritario = null;
+        int maxCount = 0;
+        for(java.util.Map.Entry<ColorBehavior, Integer> entry : colorCount.entrySet()){
+            if(entry.getValue() > maxCount){
+                maxCount = entry.getValue();
+                mayoritario = entry.getKey();
+            }
+        }
+
+        return mayoritario;
+    }
+        
+    
+
+
     public String toString(){
         String res = 
         " |TAMANIO: " + filas + " x " + columnas + 
