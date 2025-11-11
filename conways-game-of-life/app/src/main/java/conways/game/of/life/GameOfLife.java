@@ -1,14 +1,20 @@
 package conways.game.of.life;
 
-import conways.game.of.life.Celula.EstadoDeVida;
-import conways.game.of.life.color.*;
-
 import java.util.HashMap;
+import java.util.List;
+
+import conways.game.of.life.Celula.EstadoDeVida;
+import conways.game.of.life.ObserversDisplay.Observer;
+import conways.game.of.life.color.ColorBehavior;
+import conways.game.of.life.color.Rojo;
 
 public class GameOfLife {
+
     Celula[][] matrix;
     int filas;
     int columnas;
+    List<Observer> Observers;
+
 
     NacimientoBehavior nacimientoBehavior;
     SobrevivirBehavior sobrevivirBehavior;
@@ -40,6 +46,20 @@ public class GameOfLife {
 
     public void setSobrevivirBehavior(SobrevivirBehavior sobrevivirBehavior){
         this.sobrevivirBehavior = sobrevivirBehavior;
+    }
+
+    public void addObserver(Observer o){
+        Observers.add(o);
+    }
+
+    public void remove(Observer o){
+        Observers.remove(o);
+    }
+
+    public void notifyObservers(){
+        for(Observer o:Observers){
+            o.update(matrix,filas,columnas,nacimientoBehavior,sobrevivirBehavior);
+        }
     }
 
     public Celula[][] siguienteGeneracion(){
@@ -118,6 +138,8 @@ public class GameOfLife {
 
         ColorBehavior mayoritario = null;
         int maxCount = 0;
+
+
         for(java.util.Map.Entry<ColorBehavior, Integer> entry : colorCount.entrySet()){
             if(entry.getValue() > maxCount){
                 maxCount = entry.getValue();
@@ -127,28 +149,5 @@ public class GameOfLife {
 
         return mayoritario;
     }
-        
-    
 
-
-    public String toString(){
-        String res = 
-        " |TAMANIO: " + filas + " x " + columnas + 
-        "\n |FORMATO: " + "[Estado / Color] -> Estados :💀 = Muerto  🤍 = Vivo , colorDefault=⚫"  +
-        "\n |REGLAS SETEADAS: " + nacimientoBehavior.toString() + "/" + sobrevivirBehavior.toString() + "\n  |\n  |";
-
-        for(int i = 0 ; i<filas;i++){
-            for(int j = 0; j < columnas;j++){
-                Celula current = matrix[i][j];
-                if(current.estado == EstadoDeVida.VIVO){
-                    res+=" [🤍"+ current.toString() +"] ";
-                }else{ 
-                    res+=" [💀"+ current.toString() +"] ";
-                }
-            }
-            if(i != filas-1){res += "\n  |\n  |";}
-        }
-        res+="\n  |\n";
-        return res;
-    }
 }
